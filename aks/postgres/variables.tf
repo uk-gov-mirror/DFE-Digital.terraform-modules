@@ -58,10 +58,24 @@ variable "server_docker_image" {
 
 variable "server_version" {
   type        = string
-  default     = "16"
+  default     = "17"
   description = "Version of PostgreSQL server"
 }
 
+variable "pg_create_mode" {
+  type    = string
+  default = "Default"
+
+  validation {
+    condition     = contains(["Default", "Replica"], var.pg_create_mode)
+    error_message = "create_mode must be Default or Replica."
+  }
+}
+
+variable "source_server_id" {
+  type    = string
+  default = null
+}
 variable "admin_username" {
   type        = string
   description = "Username of the admin user"
@@ -132,8 +146,6 @@ variable "azure_enable_monitoring" {
   nullable = false
   default  = true
 }
-
-
 
 variable "alert_window_size" {
   type     = string
