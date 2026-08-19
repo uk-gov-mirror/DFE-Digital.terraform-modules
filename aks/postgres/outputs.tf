@@ -25,6 +25,12 @@ output "name" {
   value = local.database_name
 }
 
+output "extras" {
+  value       = var.extra_databases
+  sensitive   = true
+  description = "Displays extra PostgreSQL DB names for use in connection string"
+}
+
 output "url" {
   value     = "postgres://${urlencode(local.database_username)}:${urlencode(local.database_password)}@${local.host}:${local.port}/${local.database_name}?sslmode=${var.use_azure ? "require" : "prefer"}"
   sensitive = true
