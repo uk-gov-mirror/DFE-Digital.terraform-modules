@@ -21,7 +21,7 @@ locals {
 # Azure
 
 resource "azurerm_redis_cache" "main" {
-  count = var.use_azure ? 1 : 0
+  count = var.use_azure && var.create_cache_redis ? 1 : 0
 
   name                          = local.azure_name
   location                      = data.azurerm_resource_group.main[0].location
@@ -63,7 +63,7 @@ resource "azurerm_redis_cache" "main" {
 }
 
 resource "azurerm_private_endpoint" "main" {
-  count = var.use_azure ? 1 : 0
+  count = var.use_azure && var.create_cache_redis ? 1 : 0
 
   name                = local.azure_private_endpoint_name
   location            = data.azurerm_resource_group.main[0].location

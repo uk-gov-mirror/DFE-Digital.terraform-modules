@@ -21,7 +21,7 @@ locals {
 # Azure Managed Redis
 
 resource "azurerm_managed_redis" "main" {
-  count = var.use_azure ? 1 : 0
+  count = var.use_azure && var.create_managed_redis ? 1 : 0
 
   name                      = local.azure_name
   location                  = data.azurerm_resource_group.main[0].location
@@ -49,7 +49,7 @@ resource "azurerm_managed_redis" "main" {
 # Required Private Endpoint
 
 resource "azurerm_private_endpoint" "main" {
-  count = var.use_azure ? 1 : 0
+  count = var.use_azure && var.create_managed_redis ? 1 : 0
 
   name                = local.azure_private_endpoint_name
   location            = data.azurerm_resource_group.main[0].location
