@@ -5,7 +5,8 @@ resource "azurerm_windows_web_app" "main" {
   location                      = data.azurerm_resource_group.main.location
   resource_group_name           = data.azurerm_resource_group.main.name
   service_plan_id               = azurerm_service_plan.main.id
-  app_settings                  = local.app_settings
+  # app_settings                  = local.app_settings
+  app_settings                  = local.effective_app_settings
   public_network_access_enabled = var.public_network_access_enabled
   https_only                    = true
   virtual_network_subnet_id     = var.subnet_id
@@ -87,7 +88,16 @@ resource "azurerm_windows_web_app_slot" "main" {
 
   name           = each.key
   app_service_id = azurerm_windows_web_app.main[0].id
-  app_settings   = local.app_settings
+  # app_settings = merge(
+  #   local.app_settings,
+  #   each.value.app_settings
+  # )
+
+  app_settings = merge(
+    local.effective_app_settings,
+    each.value.app_settings,
+    local.slot_environment_settings[each.key]
+  )
 
   https_only = true
 
